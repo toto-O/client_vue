@@ -2,17 +2,28 @@
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png" />
     <!-- <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" /> -->
+    message:{{ message }}
   </div>
-  {{ version }}
 </template>
 
 <script setup lang="ts">
   import { onMounted, ref } from "vue";
   // import { reactive, computed } from "vue";
+  import axios from "axios";
 
-  // const api_url = ref("");
-  const version = ref<string>("vue3");
+  const api_url = ref<string>("hello");
+
+  const message = ref<string>("");
   onMounted(() => {
-    // this.axios.get()
+    get_message();
   });
+  const get_message = () => {
+    axios
+      .get(`http://localhost:3000/${api_url.value}`)
+      .then(({ data }) => {
+        console.log(data);
+        message.value = data.message;
+      })
+      .catch((error) => console.error(error));
+  };
 </script>
