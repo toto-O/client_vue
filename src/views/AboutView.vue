@@ -1,5 +1,29 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
+  <div class="home">
+    <img alt="Vue logo" src="../assets/logo.png" />
+    <!-- <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" /> -->
+    message:{{ message }}
   </div>
 </template>
+
+<script setup lang="ts">
+  import { onMounted, ref } from "vue";
+  // import { reactive, computed } from "vue";
+  import axios from "axios";
+
+  // const api_url = ref<string>("index");
+
+  const message = ref<string>("");
+  onMounted(() => {
+    get_message();
+  });
+  const get_message = () => {
+    axios
+      .get(`http://localhost:3000`)
+      .then(({ data }) => {
+        console.log(data);
+        message.value = data.message;
+      })
+      .catch((error) => console.error(error));
+  };
+</script>

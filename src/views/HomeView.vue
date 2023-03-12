@@ -11,7 +11,8 @@
   // import { reactive, computed } from "vue";
   import axios from "axios";
 
-  const api_url = ref<string>("hello");
+  // const api_url = ref<string>("hello");
+  const api_url = ref<string>("users");
 
   const message = ref<string>("");
   onMounted(() => {
