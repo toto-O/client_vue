@@ -12,7 +12,7 @@
   import axios from "axios";
 
   // const api_url = ref<string>("hello");
-  const api_url = ref<string>("users");
+  const api_url = ref<string>("/users");
 
   const message = ref<string>("");
   onMounted(() => {
@@ -20,7 +20,7 @@
   });
   const get_message = () => {
     axios
-      .get(`http://localhost:3000/${api_url.value}`)
+      .get(api_url.value)
       .then(({ data }) => {
         console.log(data);
         message.value = data.message;
