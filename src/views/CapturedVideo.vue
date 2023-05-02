@@ -9,8 +9,8 @@
     <button v-else @click="media_recorder.start()">Start</button>
     <!-- button -->
   </div>
-  <video ref="video" muted playsinline autoplay v-show="!recorder_blob_url" />
-  <!-- playsinline -->
+  <video ref="video" muted v-show="!recorder_blob_url" />
+  <!-- playsinline autoplay-->
   <video :src="recorder_blob_url" controls v-show="recorder_blob_url" />
 </template>
 
@@ -20,7 +20,7 @@
   const media_recorder = ref();
   const video_is_recording = ref<boolean>(false);
   const recorder_blob_url = ref<string>();
-  const camera_property = reactive({
+  const camera_property = reactive<object>({
     video: {
       facingMode: "environment",
       height: { min: 720, max: 1080 },
@@ -32,18 +32,18 @@
   onMounted(() => {
     camera_init();
   });
-  //
   onBeforeMount(() => {
     if (!media_recorder.value || media_recorder.value?.stream) return;
-    media_recorder.value?.stream.getTracks().forEach((track) => track.stop());
+    media_recorder.value?.stream
+      .getTracks()
+      .forEach((track: { stop: () => any }) => track.stop());
   });
-  const captured_video_reset = () => {
-    recorder_blob_url.value = undefined;
-  };
+  //methods
   const camera_init = () => {
     navigator.mediaDevices
       .getUserMedia(camera_property)
       .then((media_stream) => {
+        // test if the stream
         const [setting_track] = media_stream.getVideoTracks();
         console.log(setting_track.getSettings());
         captured_camera(media_stream);
@@ -53,15 +53,12 @@
         console.error(error);
       });
   };
-
+  const video = ref<HTMLVideoElement | undefined>();
   const captured_camera = (video_stream: MediaStream) => {
-    const video = ref<HTMLVideoElement | null>(null);
-    // video.value?.setAttribute("playsInline", true);
-
-    if (video.value) {
-      video.value.srcObject = video_stream;
-      video.value.play();
-    }
+    // video.value?.setAttribute("playsinline", true);
+    // don't need to set srcObject, because it's already set in the video element
+    video.value!.srcObject = video_stream;
+    video.value!.play();
   };
   const controls_camera = (video_stream: MediaStream) => {
     const recorder_option = {
@@ -71,8 +68,9 @@
     // media_recorder.value.isTypeSupported("video/webm");
 
     let captured_data: any = ref([]);
-    media_recorder.value!.ondataavailable = (event) => {
+    media_recorder.value!.ondataavailable = (event: { data: any }) => {
       captured_data.value?.push(event.data);
+      console.log(event.data);
     };
     media_recorder.value!.onstart = () => {
       captured_data.value = [];
@@ -87,10 +85,14 @@
       recorder_blob_url.value = URL.createObjectURL(recorder_blob);
     };
   };
+  const captured_video_reset = () => {
+    recorder_blob_url.value = undefined;
+  };
 </script>
 
 <style>
   video {
+    object-fit: contain;
     width: 100%;
     background: rgba(0, 0, 0, 0.2);
   }
