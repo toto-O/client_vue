@@ -6,18 +6,19 @@
   </div>
   <!-- button -->
   <div v-if="media_recorder">
-    <button v-if="recorder_blob_url" @click="captured_video_reset()">
-      RESET
-    </button>
-    <button v-else-if="video_is_recording" @click="media_recorder.stop()">
-      STOP
-    </button>
-    <button v-else @click="media_recorder.start()">Start</button>
+    <CapturedButton
+      :video_is_recording="video_is_recording"
+      :recorder_blob_url="recorder_blob_url"
+      @captured_video_reset="captured_video_reset()"
+      @stop_recording="media_recorder.stop()"
+      @start_recording="media_recorder.start()"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
   import { onMounted, onBeforeMount, ref, reactive } from "vue";
+  import CapturedButton from "@/components/Molecule/CapturedButton.vue";
   //data
   const media_recorder = ref();
   const video_is_recording = ref<boolean>(false);
@@ -73,7 +74,7 @@
     let captured_data: any = ref([]);
     media_recorder.value!.ondataavailable = (event: { data: any }) => {
       captured_data.value?.push(event.data);
-      console.log(event.data);
+      // console.log(event.data);
     };
     media_recorder.value!.onstart = () => {
       captured_data.value = [];
