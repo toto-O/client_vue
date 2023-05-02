@@ -1,4 +1,10 @@
 <template>
+  <div>
+    <video ref="video" muted v-show="!recorder_blob_url" />
+    <!-- playsinline autoplay-->
+    <video :src="recorder_blob_url" controls v-show="recorder_blob_url" />
+  </div>
+  <!-- button -->
   <div v-if="media_recorder">
     <button v-if="recorder_blob_url" @click="captured_video_reset()">
       RESET
@@ -7,11 +13,7 @@
       STOP
     </button>
     <button v-else @click="media_recorder.start()">Start</button>
-    <!-- button -->
   </div>
-  <video ref="video" muted v-show="!recorder_blob_url" />
-  <!-- playsinline autoplay-->
-  <video :src="recorder_blob_url" controls v-show="recorder_blob_url" />
 </template>
 
 <script setup lang="ts">
