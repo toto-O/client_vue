@@ -20,6 +20,7 @@
   const media_recorder = ref();
   const video_is_recording = ref<boolean>(false);
   const recorder_blob_url = ref<string>();
+  const video = ref<HTMLVideoElement | undefined>();
   const camera_property = reactive<object>({
     video: {
       facingMode: "environment",
@@ -53,7 +54,7 @@
         console.error(error);
       });
   };
-  const video = ref<HTMLVideoElement | undefined>();
+
   const captured_camera = (video_stream: MediaStream) => {
     // video.value?.setAttribute("playsinline", true);
     // don't need to set srcObject, because it's already set in the video element
