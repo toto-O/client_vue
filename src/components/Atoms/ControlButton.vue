@@ -7,7 +7,7 @@
 <script setup lang="ts">
   import { defineProps, defineEmits } from "vue";
   const props = defineProps({
-    label_name: String,
+    label_name: { type: String, default: "ignition" },
   });
   interface Emits {
     // 関数名, 引数の型, 返り値の型

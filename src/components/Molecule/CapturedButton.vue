@@ -11,7 +11,7 @@
   />
   <ControlButton
     v-else
-    label_name="Start"
+    label_name="START"
     @ignition_function="start_recording()"
   />
 </template>
